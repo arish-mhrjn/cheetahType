@@ -32,12 +32,13 @@ body {
 
 main {
   width: 800px;
-  margin: 20px auto;
+  margin: 50px auto;
 }
 
 #header {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  margin: 20px 6px 30px;
 }
 
 #buttons {
@@ -53,4 +54,73 @@ button {
   padding: 5px 20px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+#game {
+  line-height: 35px;
+  height: 105px;
+  overflow: hidden;
+  position: relative;
+}
+
+#game:focus {
+  outline: 0;
+}
+#game:focus #words {
+  filter: blur(0px);
+}
+
+div.word {
+  display: inline-block;
+  font-family: "Roboto Mono", monospace;
+  margin: 0 5px;
+}
+
+#words {
+  filter: blur(5px);
+  color: var(--textSecondary);
+}
+
+#focus-error {
+  position: absolute;
+  inset: 0;
+  text-align: center;
+  padding-top: 35px;
+}
+
+#game:focus #focus-error {
+  display: none;
+}
+
+.letter.correct {
+  color: #fff;
+}
+.letter.incorrect {
+  color: #f55;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+#cursor {
+  display: none;
+  width: 2px;
+  height: 1.6rem;
+  background-color: var(--primaryColor);
+  position: fixed;
+  top: 206px;
+  left: 303px;
+  animation: blink 0.8s infinite;
+}
+
+#game:focus #cursor {
+  display: block;
 }

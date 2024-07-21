@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CheetahType</title>
     <link rel="stylesheet" href="style.css" />
+    <script defer src="script.js"></script>
   </head>
   <body>
     <main>
@@ -18,10 +19,11 @@
           <button>New game</button>
         </div>
       </div>
-      <div id="game">
+      <div id="game" tabindex="0">
         <div id="words"></div>
         <!-- /all words inside -->
         <div id="cursor"></div>
+        <div id="focus-error">Click here to focus</div>
       </div>
     </main>
   </body>
