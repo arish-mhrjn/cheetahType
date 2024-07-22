@@ -41,12 +41,14 @@ function newGame() {
 }
 
 game.addEventListener("keyup", (ev) => {
+  ev.preventDefault();
   const key = ev.key;
   const currentLetter = document.querySelector(".letter.current");
   const currentWord = document.querySelector(".word.current");
   const expected = currentLetter?.innerHTML || " ";
   const isLetter = key.length === 1 && key !== " ";
   const isSpace = key === " ";
+
   console.log({ key, expected });
   if (isLetter) {
     if (currentLetter) {
@@ -55,6 +57,15 @@ game.addEventListener("keyup", (ev) => {
       if (currentLetter.nextSibling) {
         addClass(currentLetter.nextSibling, "current");
       }
+    } else {
+      console.dir(currentWord);
+      const incorrectLetter = document.createElement("span");
+      incorrectLetter.innerHTML = key;
+      incorrectLetter.className = "letter incorrect extra";
+      currentWord.innerHTML = currentWord.innerHTML.trim();
+      currentWord.appendChild(incorrectLetter);
+      // const incorrectLetter = `<span class="letter incorrect extra">${key}</span>`;
+      // currentWord.innerHTML = currentWord.innerHTML.trim() + incorrectLetter;
     }
   }
 
@@ -96,5 +107,14 @@ game.addEventListener("keyup", (ev) => {
     }
   }
 });
+
+//moving cursor
+const cursor = document.getElementById(".cursor");
+const nextLetter = document.querySelector(".letter.current");
+console.log(nextLetter.getBoundingClientRect().top);
+if (nextLetter) {
+  cursor.style.top = nextLetter.getBoundingClientRect().top + 2 + "px";
+  cursor.style.left = nextLetter.getBoundingClientRect().left + 2 + "px";
+}
 
 newGame();

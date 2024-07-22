@@ -37,7 +37,7 @@ main {
 
 #header {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+
   margin: 20px 6px 30px;
 }
 
@@ -91,12 +91,18 @@ div.word {
 #game:focus #focus-error {
   display: none;
 }
-
+.letter {
+  display: inline-block;
+}
 .letter.correct {
   color: #fff;
 }
+.letter.incorrect.extra {
+  color: #f55;
+}
 .letter.incorrect {
   color: #f55;
+  margin-left: 0;
 }
 
 @keyframes blink {
@@ -116,8 +122,8 @@ div.word {
   height: 1.6rem;
   background-color: var(--primaryColor);
   position: fixed;
-  top: 206px;
-  left: 303px;
+  top: 232px;
+  left: 372px;
   animation: blink 0.8s infinite;
 }
 
