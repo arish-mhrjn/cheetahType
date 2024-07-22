@@ -48,7 +48,7 @@ game.addEventListener("keyup", (ev) => {
   const expected = currentLetter?.innerHTML || " ";
   const isLetter = key.length === 1 && key !== " ";
   const isSpace = key === " ";
-  const isBackspace = "Backspace";
+  const isBackspace = key === "Backspace";
   const isFirstLetter = currentLetter === currentWord.firstElementChild;
   if (isLetter) {
     if (currentLetter) {
@@ -69,7 +69,7 @@ game.addEventListener("keyup", (ev) => {
       // currentWord.innerHTML = currentWord.innerHTML.trim() + incorrectLetter;
     }
   }
-
+  console.dir({ currentLetter });
   if (isSpace) {
     if (expected !== " ") {
       const lettersToInvalidate = [
@@ -110,10 +110,52 @@ game.addEventListener("keyup", (ev) => {
 
   //backspace
   if (isBackspace) {
-    if (currentLetter && isFirstLetter) {
-      //make previous word current & last letter current
-      removeClass(currentWord, "current");
-      addClass(currentWord.previousElementSibling, "current");
+    if (currentLetter) {
+      removeClass(currentLetter, "current");
+      const prevLetter = currentLetter.previousElementSibling;
+
+      //Handle when cursor is at the first letter of the next word
+      if (isFirstLetter && currentWord.previousElementSibling) {
+        const prevWord = currentWord.previousElementSibling;
+        const hasIncorrectLetter = Array.from(prevWord.children).some(
+          (letter) => letter.classList.contains("incorrect")
+        );
+        if (hasIncorrectLetter) {
+          removeClass(currentWord, "current");
+          addClass(prevWord, "current");
+          const lastLetterOfPreviousWord = prevWord.lastElementChild;
+          if (lastLetterOfPreviousWord) {
+            addClass(lastLetterOfPreviousWord, "current");
+            removeClass(lastLetterOfPreviousWord, "correct");
+            removeClass(lastLetterOfPreviousWord, "incorrect");
+          }
+        } else {
+          addClass(currentLetter, "current");
+        }
+      } else if (!isFirstLetter) {
+        if (prevLetter) {
+          removeClass(currentLetter, "correct");
+          removeClass(currentLetter, "incorrect");
+          removeClass(currentLetter, "current");
+          addClass(prevLetter, "current");
+          removeClass(prevLetter, "correct");
+          removeClass(prevLetter, "incorrect");
+        }
+      }
+    } else {
+      const hasIncorrectLetter = Array.from(currentWord.children).some(
+        (letter) => letter.classList.contains("incorrect")
+      );
+      if (currentWord) {
+        const lastLetterOfPreviousWord = currentWord.lastElementChild;
+        if (hasIncorrectLetter) {
+          if (lastLetterOfPreviousWord) {
+            addClass(lastLetterOfPreviousWord, "current");
+            removeClass(lastLetterOfPreviousWord, "correct");
+            removeClass(lastLetterOfPreviousWord, "incorrect");
+          }
+        }
+      }
     }
   }
 
