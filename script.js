@@ -50,6 +50,7 @@ game.addEventListener("keyup", (ev) => {
   const isSpace = key === " ";
   const isBackspace = key === "Backspace";
   const isFirstLetter = currentLetter === currentWord.firstElementChild;
+
   if (isLetter) {
     if (currentLetter) {
       addClass(currentLetter, key === expected ? "correct" : "incorrect");
@@ -111,23 +112,36 @@ game.addEventListener("keyup", (ev) => {
   //backspace
   if (isBackspace) {
     if (currentLetter) {
-      removeClass(currentLetter, "current");
       const prevLetter = currentLetter.previousElementSibling;
 
       //Handle when cursor is at the first letter of the next word
-      if (isFirstLetter && currentWord.previousElementSibling) {
+      if (isFirstLetter && currentWord.previousSibling) {
         const prevWord = currentWord.previousElementSibling;
         const hasIncorrectLetter = Array.from(prevWord.children).some(
           (letter) => letter.classList.contains("incorrect")
         );
         if (hasIncorrectLetter) {
-          removeClass(currentWord, "current");
-          addClass(prevWord, "current");
-          const lastLetterOfPreviousWord = prevWord.lastElementChild;
-          if (lastLetterOfPreviousWord) {
+          const extraLetter = Array.from(prevWord.children).some((letter) =>
+            letter.classList.contains("extra")
+          );
+          if (!extraLetter) {
+            removeClass(currentWord, "current");
+            addClass(prevWord, "current");
+            const lastLetterOfPreviousWord = prevWord.lastElementChild;
+            if (lastLetterOfPreviousWord) {
+              addClass(lastLetterOfPreviousWord, "current");
+              removeClass(lastLetterOfPreviousWord, "correct");
+              removeClass(lastLetterOfPreviousWord, "incorrect");
+            }
+          } else if (extraLetter) {
+            removeClass(currentWord, "current");
+            addClass(prevWord, "current");
+            const lastLetterOfPreviousWord = prevWord.lastElementChild;
             addClass(lastLetterOfPreviousWord, "current");
-            removeClass(lastLetterOfPreviousWord, "correct");
-            removeClass(lastLetterOfPreviousWord, "incorrect");
+            const extraElement = prevWord.querySelector(".current");
+            if (extraElement) {
+              extraElement.parentNode.removeChild(extraElement);
+            }
           }
         } else {
           addClass(currentLetter, "current");
@@ -146,20 +160,35 @@ game.addEventListener("keyup", (ev) => {
       const hasIncorrectLetter = Array.from(currentWord.children).some(
         (letter) => letter.classList.contains("incorrect")
       );
+      const extraLetter = Array.from(currentWord.children).some((letter) =>
+        letter.classList.contains("extra")
+      );
+
       if (currentWord) {
         const lastLetterOfPreviousWord = currentWord.lastElementChild;
         if (hasIncorrectLetter) {
-          if (lastLetterOfPreviousWord) {
+          if (!extraLetter) {
+            if (lastLetterOfPreviousWord) {
+              addClass(lastLetterOfPreviousWord, "current");
+              removeClass(lastLetterOfPreviousWord, "correct");
+              removeClass(lastLetterOfPreviousWord, "incorrect");
+            }
+          } else if (extraLetter) {
             addClass(lastLetterOfPreviousWord, "current");
-            removeClass(lastLetterOfPreviousWord, "correct");
-            removeClass(lastLetterOfPreviousWord, "incorrect");
+            const extraElement = currentWord.querySelector(".current");
+            if (extraElement) {
+              extraElement.parentNode.removeChild(extraElement);
+            }
           }
         }
       }
     }
   }
-
   //moving cursor
+  updateCursorPositioning();
+});
+
+function updateCursorPositioning() {
   const cursor = document.getElementById("cursor");
   const nextLetter = document.querySelector(".letter.current");
   const nextWord = document.querySelector(".word.current");
@@ -169,6 +198,8 @@ game.addEventListener("keyup", (ev) => {
     (nextLetter || nextWord).getBoundingClientRect()[
       nextLetter ? "left" : "right"
     ] + "px";
-});
+}
 
 newGame();
+updateCursorPositioning();
+window.addEventListener("resize", updateCursorPositioning);

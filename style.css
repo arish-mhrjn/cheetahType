@@ -98,10 +98,12 @@ div.word {
   color: #fff;
 }
 .letter.incorrect.extra {
-  color: #f55;
+  color: #ff1616;
+  opacity: 0.45;
 }
 .letter.incorrect {
-  color: #f55;
+  color: #ff7070;
+
   margin-left: 0;
 }
 
@@ -122,11 +124,21 @@ div.word {
   height: 1.6rem;
   background-color: var(--primaryColor);
   position: fixed;
-  top: 233px;
-  left: 302px;
   animation: blink 0.8s infinite;
 }
 
 #game:focus #cursor {
   display: block;
+}
+@media (max-width: 1024px) {
+  main {
+    width: 90%;
+    margin: 30px auto;
+  }
+  body {
+    font-size: 1.2rem;
+  }
+  .cheetah {
+    width: 60px;
+  }
 }
