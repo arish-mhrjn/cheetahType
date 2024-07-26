@@ -3,6 +3,7 @@
 //query selectors
 let word = document.getElementById("words");
 const game = document.getElementById("game");
+const timer = document.getElementById("info");
 const words =
   "land came much that want light never the did red end sometimes said set found here got red at next in live light much air near river ask miss still every into in cut place where state until been our take ask while man oil saw hand part tell same large the little song paper about below fall seem turn play far man seem back must food all large out again war is letter one what thing paper day sea great world were run make write turn me to back".split(
     " "
@@ -51,13 +52,15 @@ game.addEventListener("keyup", (ev) => {
   const isBackspace = key === "Backspace";
   const isFirstLetter = currentLetter === currentWord.firstElementChild;
 
+  //move lines
+  updateScroll();
+
   if (isLetter) {
     if (currentLetter) {
       addClass(currentLetter, key === expected ? "correct" : "incorrect");
       removeClass(currentLetter, "current");
       if (currentLetter.nextElementSibling != null) {
         addClass(currentLetter.nextSibling, "current");
-      } else {
       }
     } else {
       console.dir(currentWord);
@@ -126,6 +129,9 @@ game.addEventListener("keyup", (ev) => {
           );
           if (!extraLetter) {
             removeClass(currentWord, "current");
+            if (currentLetter) {
+              removeClass(currentLetter, "current");
+            }
             addClass(prevWord, "current");
             const lastLetterOfPreviousWord = prevWord.lastElementChild;
             if (lastLetterOfPreviousWord) {
@@ -134,6 +140,9 @@ game.addEventListener("keyup", (ev) => {
               removeClass(lastLetterOfPreviousWord, "incorrect");
             }
           } else if (extraLetter) {
+            if (currentLetter) {
+              removeClass(currentLetter, "current");
+            }
             removeClass(currentWord, "current");
             addClass(prevWord, "current");
             const lastLetterOfPreviousWord = prevWord.lastElementChild;
@@ -199,7 +208,23 @@ function updateCursorPositioning() {
       nextLetter ? "left" : "right"
     ] + "px";
 }
+let requiredLength;
+function updateScroll() {
+  const currentWord = document.querySelector(".word.current");
+  let checkLength = currentWord.getBoundingClientRect().top;
+  console.log(checkLength, requiredLength);
+  if (checkLength > requiredLength) {
+    const margin = parseInt(word.style.marginTop || "0px");
+    word.style.marginTop = margin - 37 + "px";
+    updateCursorPositioning();
+    requiredLength -= 0.545454;
+  }
+}
 
 newGame();
+//scroll function
+requiredLength = word.getBoundingClientRect().top + 70;
+
 updateCursorPositioning();
 window.addEventListener("resize", updateCursorPositioning);
+window.addEventListener("resize", updateScroll);
