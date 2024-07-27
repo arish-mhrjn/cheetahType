@@ -37,7 +37,6 @@ main {
 
 #header {
   display: grid;
-
   margin: 20px 6px 30px;
 }
 
@@ -103,7 +102,6 @@ div.word {
 }
 .letter.incorrect {
   color: #ff7070;
-
   margin-left: 0;
 }
 
@@ -141,4 +139,16 @@ div.word {
   .cheetah {
     width: 60px;
   }
+}
+
+#game.over #words {
+  opacity: 0.5;
+}
+
+#game.over:focus #cursor {
+  display: none;
+}
+
+#game.over #focus-error {
+  display: none;
 }
