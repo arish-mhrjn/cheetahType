@@ -74,6 +74,9 @@ div.word {
   font-family: "Roboto Mono", monospace;
   margin: 0 5px;
 }
+div.word.hidden {
+  display: none;
+}
 
 #words {
   filter: blur(5px);
@@ -121,7 +124,8 @@ div.word {
   width: 2px;
   height: 1.6rem;
   background-color: var(--primaryColor);
-  position: fixed;
+  transition: 0.2s;
+  position: absolute;
   animation: blink 0.8s infinite;
 }
 
