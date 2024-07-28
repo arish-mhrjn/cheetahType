@@ -186,22 +186,49 @@ function updateCursorPositioning() {
   const cursor = document.getElementById("cursor");
   const nextLetter = document.querySelector(".letter.current");
   const nextWord = document.querySelector(".word.current");
-  cursor.style.top =
-    (nextLetter || nextWord).getBoundingClientRect().top + 6 + "px";
+
+  cursor.style.top = (nextLetter || nextWord).offsetTop + 6 + "px";
   cursor.style.left =
-    (nextLetter || nextWord).getBoundingClientRect()[
-      nextLetter ? "left" : "right"
-    ] + "px";
+    (nextLetter || nextWord)[nextLetter ? "offsetLeft" : "offsetRight"] + "px";
+
+  const cursorTop = cursor.offsetTop;
+  // console.log(cursorTop, requiredLength)
+  if (cursorTop > 35 * 2) {
+    console.log("line changed");
+  }
+  // if ((nextLetter || nextWord).offsetTop > cursorTop+7 && cursorTop-7 >= requiredLength) {
+  //   console.log("line changed")
+  // }
 }
 
 let lineHeight;
 let requiredLength;
 
+function removeFirstLine() {
+  const containerTop = document
+    .getElementById("words")
+    .getBoundingClientRect().top;
+  const wordsList = document.querySelectorAll(".word");
+  // console.log(wordsList);
+  for (const word of wordsList) {
+    word.topValue = word.getBoundingClientRect().top - containerTop;
+  }
+  for (const word of wordsList) {
+    if (word.topValue < 35) {
+      addClass(word, "hidden");
+    }
+  }
+
+  // document.querySelectorAll('.word').forEach((word) => {
+  // })
+}
+
 function updateScroll() {
   const currentWord = document.querySelector(".word.current");
-  const currentTop = currentWord.getBoundingClientRect().top;
-  const wordheight = word.getBoundingClientRect().top;
+  const currentTop = currentWord.offsetTop;
+  const wordheight = word.offsetTop;
   console.log(wordheight);
+
   if (!lineHeight) {
     lineHeight = parseFloat(window.getComputedStyle(currentWord).lineHeight);
   }
@@ -209,7 +236,9 @@ function updateScroll() {
   if (currentTop > requiredLength) {
     const margin = parseInt(word.style.marginTop || "0px");
     console.log(margin);
-    word.style.marginTop = margin - lineHeight + "px";
+    removeFirstLine();
+    // word.style.marginTop = margin - lineHeight + "px";
+
     updateCursorPositioning();
   }
 }
@@ -217,11 +246,11 @@ function updateScroll() {
 newGame();
 
 // Scroll function
-requiredLength = word.getBoundingClientRect().top + 70;
+requiredLength = word.offsetTop + 70;
 
 updateCursorPositioning();
 window.addEventListener("resize", () => {
-  requiredLength = word.getBoundingClientRect().top + 70;
+  requiredLength = word.offsetTop + 70;
   updateCursorPositioning();
 });
 window.addEventListener("resize", updateScroll);
