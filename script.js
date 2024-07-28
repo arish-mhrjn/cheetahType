@@ -67,19 +67,7 @@ game.addEventListener("keyup", (ev) => {
   updateScroll();
 
   if (!window.timer && isLetter) {
-    window.timer = setInterval(() => {
-      if (!window.gameStart) {
-        window.gameStart = new Date().getTime();
-      }
-      const currentTime = new Date().getTime();
-      const msPassed = currentTime - window.gameStart;
-      const sPassed = Math.round(msPassed / 1000);
-      const sLeft = gameTime / 1000 - sPassed;
-      if (sLeft <= 0) {
-        gameOver();
-      }
-      document.getElementById("info").innerHTML = sLeft + " ";
-    }, 1000);
+    startTimer();
   }
 
   if (isLetter) {
@@ -181,6 +169,24 @@ game.addEventListener("keyup", (ev) => {
   updateCursorPositioning();
 });
 
+const startTimer = function () {
+  window.timer = function () {
+    if (!window.gameStart) {
+      window.gameStart = new Date().getTime();
+    }
+    const currentTime = new Date().getTime();
+    const msPassed = currentTime - window.gameStart;
+    const sPassed = Math.round(msPassed / 1000);
+    const sLeft = gameTime / 1000 - sPassed;
+    if (sLeft <= 0) {
+      gameOver();
+    }
+    document.getElementById("info").innerHTML = sLeft + " ";
+  };
+  window.timer();
+  const timer = setInterval(window.timer, 1000);
+  return timer;
+};
 function updateCursorPositioning() {
   const cursor = document.getElementById("cursor");
   const nextLetter = document.querySelector(".letter.current");
@@ -197,12 +203,9 @@ function updateCursorPositioning() {
     }
   }
   const cursorTop = cursor.offsetTop;
-  // console.log(cursorTop, requiredLength)
-  if (cursorTop > 35 * 2) {
-    console.log("line changed");
-  }
+  // console.log(cursorTop, requiredLength
   // if ((nextLetter || nextWord).offsetTop > cursorTop+7 && cursorTop-7 >= requiredLength) {
-  //   console.log("line changed")
+  //   console.log("line changed")s
   // }
 }
 
