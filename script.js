@@ -106,7 +106,7 @@ game.addEventListener("keyup", (ev) => {
   if (isBackspace) {
     if (currentLetter) {
       const prevLetter = currentLetter.previousElementSibling;
-      if (isFirstLetter && currentWord.previousSibling) {
+      if (isFirstLetter && currentWord.previousElementSibling) {
         const prevWord = currentWord.previousElementSibling;
         const hasIncorrectLetter = Array.from(prevWord.children).some(
           (letter) => letter.classList.contains("incorrect")
@@ -114,7 +114,8 @@ game.addEventListener("keyup", (ev) => {
         const extraLetter = Array.from(prevWord.children).some((letter) =>
           letter.classList.contains("extra")
         );
-        if (!extraLetter) {
+        const isHiddenWord = prevWord.classList.contains("hidden");
+        if (!extraLetter && hasIncorrectLetter) {
           removeClass(currentWord, "current");
           removeClass(currentLetter, "current");
           addClass(prevWord, "current");
@@ -124,6 +125,14 @@ game.addEventListener("keyup", (ev) => {
             removeClass(lastLetterOfPreviousWord, "correct");
             removeClass(lastLetterOfPreviousWord, "incorrect");
           }
+        } else if (!hasIncorrectLetter) {
+          const prevLetterW = prevWord.lastElementChild;
+          removeClass(prevLetterW, "current");
+          removeClass(prevWord, "current");
+        } else if (isHiddenWord) {
+          const prevLetterW = prevWord.lastElementChild;
+          removeClass(prevLetterW, "current");
+          removeClass(prevWord, "current");
         } else {
           removeClass(currentLetter, "current");
           removeClass(currentWord, "current");
@@ -245,7 +254,6 @@ function updateScroll() {
 }
 
 newGame();
-
 // Scroll function
 requiredLength = word.offsetTop + 70;
 
