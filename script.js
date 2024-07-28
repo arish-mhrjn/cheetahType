@@ -90,7 +90,6 @@ game.addEventListener("keyup", (ev) => {
         addClass(currentLetter.nextSibling, "current");
       }
     } else {
-      console.dir(currentWord);
       const incorrectLetter = document.createElement("span");
       incorrectLetter.innerHTML = key;
       incorrectLetter.className = "letter incorrect extra";
@@ -187,10 +186,16 @@ function updateCursorPositioning() {
   const nextLetter = document.querySelector(".letter.current");
   const nextWord = document.querySelector(".word.current");
 
-  cursor.style.top = (nextLetter || nextWord).offsetTop + 6 + "px";
-  cursor.style.left =
-    (nextLetter || nextWord)[nextLetter ? "offsetLeft" : "offsetRight"] + "px";
-
+  const targetElement = nextLetter || nextWord;
+  if (targetElement) {
+    cursor.style.top = targetElement.offsetTop + 6 + "px";
+    if (nextLetter) {
+      cursor.style.left = targetElement.offsetLeft + "px";
+    } else if (nextWord) {
+      cursor.style.left =
+        targetElement.offsetLeft + targetElement.offsetWidth + "px";
+    }
+  }
   const cursorTop = cursor.offsetTop;
   // console.log(cursorTop, requiredLength)
   if (cursorTop > 35 * 2) {
@@ -218,7 +223,6 @@ function removeFirstLine() {
       addClass(word, "hidden");
     }
   }
-
   // document.querySelectorAll('.word').forEach((word) => {
   // })
 }
@@ -226,19 +230,13 @@ function removeFirstLine() {
 function updateScroll() {
   const currentWord = document.querySelector(".word.current");
   const currentTop = currentWord.offsetTop;
-  const wordheight = word.offsetTop;
-  console.log(wordheight);
-
   if (!lineHeight) {
     lineHeight = parseFloat(window.getComputedStyle(currentWord).lineHeight);
   }
 
   if (currentTop > requiredLength) {
-    const margin = parseInt(word.style.marginTop || "0px");
-    console.log(margin);
     removeFirstLine();
     // word.style.marginTop = margin - lineHeight + "px";
-
     updateCursorPositioning();
   }
 }
