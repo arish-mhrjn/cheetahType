@@ -25,12 +25,15 @@ body {
 .logo {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
   color: var(--primaryColor);
+  position: relative;
+  top: -30px;
 }
 
 .cheetah {
   width: 70px;
+  margin-top: 2px;
 }
 
 main {
@@ -40,7 +43,7 @@ main {
 
 #header {
   display: grid;
-  margin: 20px 6px 30px;
+  margin: 0px 6px 30px;
 }
 
 #buttons {
@@ -159,21 +162,21 @@ div.word.hidden {
 #game.over #focus-error {
   display: none;
 }
-/* #typingPage {
+#typingPage {
   display: none;
-} */
+}
 
 #canvasPage {
-  display: none;
+  display: block;
   width: 1200px;
   height: 350px;
   position: absolute;
-  top: 60%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 #chart {
-  width: 100%;
-  height: 100%;
+  width: 1800px;
+  height: 350px;
 }

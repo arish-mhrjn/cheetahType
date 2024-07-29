@@ -36,6 +36,7 @@ function randomWord() {
 }
 
 function newGame() {
+  document.getElementById("typingPage").style.display = "none";
   word.innerHTML = "";
   for (let i = 0; i < 200; i++) {
     word.innerHTML += formatWord(words[randomWord() - 1]);
@@ -90,6 +91,8 @@ function getWpm() {
 function gameOver() {
   clearInterval(intervalId); // Stop the timer
   addClass(document.getElementById("game"), "over");
+  document.getElementById("typingPage").style.display = "none";
+  document.getElementById("canvasPage").style.display = "block";
   document.getElementById("info").innerHTML = `WPM: ${getWpm()}`;
 }
 
@@ -270,6 +273,8 @@ function updateCursorPositioning() {
 
 function chartWPM() {
   const ctx = document.getElementById("chart");
+  ctx.width = 2000;
+  ctx.height = 550;
   new Chart(ctx, {
     type: "line",
     data: {
@@ -277,16 +282,41 @@ function chartWPM() {
       datasets: [
         {
           label: "WPM",
-          data: [12, 30, 3, 5, 2, 3], //data
+          data: wpm, //data
           borderColor: "#fd4",
           borderWidth: 2,
         },
       ],
     },
     options: {
+      responsive: true,
+      elements: { line: { tension: 0.4 } },
+      hover: {
+        mode: "index",
+        intersect: false,
+      },
+      interaction: {
+        mode: "index",
+        intersect: false,
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: "TEST SUMMARY",
+        },
+      },
       scales: {
+        x: {
+          grid: {
+            drawOnChartArea: false,
+          },
+        },
         y: {
-          beginAtZero: true,
+          display: true,
+          beginAtZero: false,
+          grid: {
+            drawOnChartArea: false,
+          },
         },
       },
     },
