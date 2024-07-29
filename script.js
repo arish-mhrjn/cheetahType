@@ -233,8 +233,11 @@ const startTimer = function () {
     const sPassed = Math.round(msPassed / 1000);
     const sLeft = gameTime / 1000 - sPassed;
     xdata.push(sLeft);
-    wpm.push(CalculateWpm());
-    console.log(wpm);
+    if (sLeft < 30) {
+      wpm.push(CalculateWpm());
+      console.log(wpm);
+    }
+
     if (sLeft <= 0) {
       xdata = xdata.reverse();
       gameOver();
