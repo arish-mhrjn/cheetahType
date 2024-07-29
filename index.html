@@ -6,6 +6,7 @@
     <title>CheetahType</title>
     <link rel="stylesheet" href="style.css" />
     <script defer src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <main>
@@ -19,11 +20,16 @@
           <button>New game</button>
         </div>
       </div>
-      <div id="game" tabindex="0">
-        <div id="words"></div>
-        <!-- /all words inside -->
-        <div id="cursor"></div>
-        <div id="focus-error">Click here to focus</div>
+      <div id="typingPage">
+        <div id="game" tabindex="0">
+          <div id="words"></div>
+          <!-- /all words inside -->
+          <div id="cursor"></div>
+          <div id="focus-error">Click here to focus</div>
+        </div>
+      </div>
+      <div id="canvasPage">
+        <canvas id="chart"></canvas>
       </div>
     </main>
   </body>

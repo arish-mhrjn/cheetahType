@@ -3,15 +3,16 @@
 // Query selectors
 let word = document.getElementById("words");
 const game = document.getElementById("game");
-const timer = document.getElementById("info");
+let intervalId; // Store the interval ID
+let xdata = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Initialize xdata
+let wpm = [];
+
 const words =
   "land came much that want light never the did red end sometimes said set found here got red at next in live light much air near river ask miss still every into in cut place where state until been our take ask while man oil saw hand part tell same large the little song paper about below fall seem turn play far man seem back must food all large out again war is letter one what thing paper day sea great world were run make write turn me to back".split(
     " "
   );
 const wordsCount = words.length;
 const gameTime = 30 * 1000;
-window.timer = null;
-window.gameStart = null;
 
 function formatWord(word) {
   return `<div class="word">
@@ -44,6 +45,28 @@ function newGame() {
   window.timer = null;
 }
 
+function CalculateWpm() {
+  const words = [...document.querySelectorAll(".word")];
+  const lastTypedWord = document.querySelector(".word.current");
+  const lastTypedWordIndex = words.indexOf(lastTypedWord);
+  const typedWords = words.slice(0, lastTypedWordIndex);
+  const correctWords = typedWords.filter((word) => {
+    const letters = [...word.children];
+    const incorrectLetters = letters.filter((letter) =>
+      letter.className.includes("incorrect")
+    );
+    const correctLetters = letters.filter((letter) =>
+      letter.className.includes("correct")
+    );
+    return (
+      incorrectLetters.length === 0 && correctLetters.length === letters.length
+    );
+  });
+  const elapsedTime = gameTime / 1000 - xdata[xdata.length - 1];
+  const speed = (correctWords.length / elapsedTime) * 60;
+  return speed.toFixed(2);
+}
+
 function getWpm() {
   const words = [...document.querySelectorAll(".word")];
   const lastTypedWord = document.querySelector(".word.current");
@@ -65,7 +88,7 @@ function getWpm() {
 }
 
 function gameOver() {
-  clearInterval(window.timer);
+  clearInterval(intervalId); // Stop the timer
   addClass(document.getElementById("game"), "over");
   document.getElementById("info").innerHTML = `WPM: ${getWpm()}`;
 }
@@ -150,10 +173,6 @@ game.addEventListener("keyup", (ev) => {
           const prevLetterW = prevWord.lastElementChild;
           removeClass(prevLetterW, "current");
           removeClass(prevWord, "current");
-          // } else if (isHiddenWord) {
-          //   const prevLetterW = prevWord.lastElementChild;
-          //   removeClass(prevLetterW, "current");
-          //   removeClass(prevWord, "current");
         } else if (isHiddenWord) {
           const prevLetterW = prevWord.lastElementChild;
           removeClass(prevLetterW, "current");
@@ -208,20 +227,26 @@ const startTimer = function () {
     if (!window.gameStart) {
       window.gameStart = new Date().getTime();
     }
+
     const currentTime = new Date().getTime();
     const msPassed = currentTime - window.gameStart;
     const sPassed = Math.round(msPassed / 1000);
     const sLeft = gameTime / 1000 - sPassed;
+    xdata.push(sLeft);
+    wpm.push(CalculateWpm());
+    console.log(wpm);
     if (sLeft <= 0) {
+      xdata = xdata.reverse();
       gameOver();
       return;
     }
     document.getElementById("info").innerHTML = sLeft + " ";
   };
   window.timer();
-  const timer = setInterval(window.timer, 1000);
-  return timer;
+  intervalId = setInterval(window.timer, 1000); // Store the interval ID
+  return intervalId;
 };
+
 function updateCursorPositioning() {
   const cursor = document.getElementById("cursor");
   const nextLetter = document.querySelector(".letter.current");
@@ -238,10 +263,31 @@ function updateCursorPositioning() {
     }
   }
   const cursorTop = cursor.offsetTop;
-  // console.log(cursorTop, requiredLength
-  // if ((nextLetter || nextWord).offsetTop > cursorTop+7 && cursorTop-7 >= requiredLength) {
-  //   console.log("line changed")s
-  // }
+}
+
+function chartWPM() {
+  const ctx = document.getElementById("chart");
+  new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: xdata, //time
+      datasets: [
+        {
+          label: "WPM",
+          data: [12, 30, 3, 5, 2, 3], //data
+          borderColor: "#fd4",
+          borderWidth: 2,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
 }
 
 let lineHeight;
@@ -252,7 +298,6 @@ function removeFirstLine() {
     .getElementById("words")
     .getBoundingClientRect().top;
   const wordsList = document.querySelectorAll(".word");
-  // console.log(wordsList);
   for (const word of wordsList) {
     word.topValue = word.getBoundingClientRect().top - containerTop;
   }
@@ -261,8 +306,6 @@ function removeFirstLine() {
       addClass(word, "hidden");
     }
   }
-  // document.querySelectorAll('.word').forEach((word) => {
-  // })
 }
 
 function updateScroll() {
@@ -274,13 +317,12 @@ function updateScroll() {
 
   if (currentTop > requiredLength) {
     removeFirstLine();
-    // word.style.marginTop = margin - lineHeight + "px";
     updateCursorPositioning();
   }
 }
 
 newGame();
-// Scroll function
+chartWPM();
 requiredLength = word.offsetTop + 70;
 
 updateCursorPositioning();
