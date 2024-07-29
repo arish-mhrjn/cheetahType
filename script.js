@@ -44,9 +44,30 @@ function newGame() {
   window.timer = null;
 }
 
+function getWpm() {
+  const words = [...document.querySelectorAll(".word")];
+  const lastTypedWord = document.querySelector(".word.current");
+  const lastTypedWordIndex = words.indexOf(lastTypedWord);
+  const typedWords = words.slice(0, lastTypedWordIndex);
+  const correctWords = typedWords.filter((word) => {
+    const letters = [...word.children];
+    const incorrectLetters = letters.filter((letter) =>
+      letter.className.includes("incorrect")
+    );
+    const correctLetters = letters.filter((letter) =>
+      letter.className.includes("correct")
+    );
+    return (
+      incorrectLetters.length === 0 && correctLetters.length === letters.length
+    );
+  });
+  return (correctWords.length / gameTime) * 60000;
+}
+
 function gameOver() {
   clearInterval(window.timer);
   addClass(document.getElementById("game"), "over");
+  document.getElementById("info").innerHTML = `WPM: ${getWpm()}`;
 }
 
 game.addEventListener("keyup", (ev) => {
@@ -66,7 +87,7 @@ game.addEventListener("keyup", (ev) => {
   // Move lines
   updateScroll();
 
-  if (!window.timer && isLetter) {
+  if (!window.timer && (isLetter || isSpace)) {
     startTimer();
   }
 
@@ -115,7 +136,7 @@ game.addEventListener("keyup", (ev) => {
           letter.classList.contains("extra")
         );
         const isHiddenWord = prevWord.classList.contains("hidden");
-        if (!extraLetter && hasIncorrectLetter) {
+        if (!extraLetter && hasIncorrectLetter && !isHiddenWord) {
           removeClass(currentWord, "current");
           removeClass(currentLetter, "current");
           addClass(prevWord, "current");
@@ -125,10 +146,14 @@ game.addEventListener("keyup", (ev) => {
             removeClass(lastLetterOfPreviousWord, "correct");
             removeClass(lastLetterOfPreviousWord, "incorrect");
           }
-        } else if (!hasIncorrectLetter) {
+        } else if (!hasIncorrectLetter && !isHiddenWord) {
           const prevLetterW = prevWord.lastElementChild;
           removeClass(prevLetterW, "current");
           removeClass(prevWord, "current");
+          // } else if (isHiddenWord) {
+          //   const prevLetterW = prevWord.lastElementChild;
+          //   removeClass(prevLetterW, "current");
+          //   removeClass(prevWord, "current");
         } else if (isHiddenWord) {
           const prevLetterW = prevWord.lastElementChild;
           removeClass(prevLetterW, "current");
@@ -189,6 +214,7 @@ const startTimer = function () {
     const sLeft = gameTime / 1000 - sPassed;
     if (sLeft <= 0) {
       gameOver();
+      return;
     }
     document.getElementById("info").innerHTML = sLeft + " ";
   };
