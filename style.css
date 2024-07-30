@@ -28,8 +28,7 @@ body {
   color: var(--primaryColor);
   position: relative;
   top: -30px;
-  left: -350px;
-  margin-bottom: 14rem;
+  left: -220px;
 }
 
 .cheetah {
@@ -38,13 +37,13 @@ body {
 }
 
 main {
-  width: 900px;
+  width: 1000px;
   margin: 50px auto;
 }
 
 #header {
   display: flex;
-  margin: 0px 6px 30px;
+  margin: 70px 6px 180px;
   position: relative;
   top: -10px;
   align-items: center;

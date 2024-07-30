@@ -93,7 +93,10 @@ function gameOver() {
   addClass(document.getElementById("game"), "over");
   document.getElementById("typingPage").style.display = "none";
   document.getElementById("canvasPage").style.display = "flex";
-  document.getElementById("info").innerHTML = `WPM: ${getWpm()}`;
+  document.getElementById("info").style.display = "none";
+  document.getElementById("header").style.justifyContent = "flex-end";
+  document.querySelector(".wpm").textContent = getWpm();
+  document.querySelector(".time").innerHTML = `${gameTime / 1000} sec`;
 }
 
 game.addEventListener("keyup", (ev) => {
