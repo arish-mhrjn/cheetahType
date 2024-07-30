@@ -47,7 +47,7 @@ function newGame() {
   window.timer = null;
 }
 
-function CalculateWpm() {
+function CalculateWpm(timePassed) {
   const words = [...document.querySelectorAll(".word")];
   const lastTypedWord = document.querySelector(".word.current");
   const lastTypedWordIndex = words.indexOf(lastTypedWord);
@@ -64,8 +64,7 @@ function CalculateWpm() {
       incorrectLetters.length === 0 && correctLetters.length === letters.length
     );
   });
-  const elapsedTime = gameTime / 1000 - xdata[xdata.length - 1];
-  const speed = (correctWords.length / elapsedTime) * 60;
+  const speed = (correctWords.length / timePassed) * 60;
   return speed.toFixed(2);
 }
 
@@ -93,7 +92,7 @@ function gameOver() {
   clearInterval(intervalId); // Stop the timer
   addClass(document.getElementById("game"), "over");
   document.getElementById("typingPage").style.display = "none";
-  document.getElementById("canvasPage").style.display = "block";
+  document.getElementById("canvasPage").style.display = "flex";
   document.getElementById("info").innerHTML = `WPM: ${getWpm()}`;
 }
 
@@ -236,14 +235,11 @@ const startTimer = function () {
     const msPassed = currentTime - window.gameStart;
     const sPassed = Math.round(msPassed / 1000);
     const sLeft = gameTime / 1000 - sPassed;
-    xdata.push(sLeft);
-    if (sLeft < 30) {
-      wpm.push(CalculateWpm());
-      console.log(wpm);
+    if (sPassed > 0) {
+      xdata.push(sPassed);
+      wpm.push(CalculateWpm(sPassed));
     }
-
     if (sLeft <= 0) {
-      xdata = xdata.reverse();
       gameOver();
       return;
     }
