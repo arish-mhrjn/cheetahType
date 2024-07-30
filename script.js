@@ -45,6 +45,7 @@ function newGame() {
   addClass(document.querySelector(".word"), "current");
   addClass(document.querySelector(".letter"), "current");
   window.timer = null;
+  document.getElementById("info").display = "block";
 }
 
 function CalculateWpm(timePassed) {
