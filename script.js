@@ -4,7 +4,7 @@
 let word = document.getElementById("words");
 const game = document.getElementById("game");
 let intervalId; // Store the interval ID
-let xdata = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Initialize xdata
+let xdata = []; // Initialize xdata
 let wpm = [];
 
 const words =
@@ -36,7 +36,8 @@ function randomWord() {
 }
 
 function newGame() {
-  document.getElementById("typingPage").style.display = "none";
+  document.getElementById("typingPage").style.display = "block";
+  document.getElementById("canvasPage").style.display = "none";
   word.innerHTML = "";
   for (let i = 0; i < 200; i++) {
     word.innerHTML += formatWord(words[randomWord() - 1]);
@@ -272,19 +273,35 @@ function updateCursorPositioning() {
 }
 
 function chartWPM() {
-  const ctx = document.getElementById("chart");
-  ctx.width = 2000;
-  ctx.height = 550;
+  const plugin = {
+    id: "increaseLegendMargin",
+    beforeInit(chart) {
+      // Get a reference to the original fit function
+      const origFit = chart.legend.fit;
+      chart.legend.fit = function fit() {
+        origFit.bind(chart.legend)();
+        // Change the height to any desired value
+        this.height += 50;
+      };
+    },
+  };
+
+  const ctx = document.getElementById("chart").getContext("2d");
+  const canvasContainer = document.getElementById("graph");
+  ctx.canvas.width = canvasContainer.clientWidth;
+  ctx.canvas.height = canvasContainer.clientHeight;
+
   new Chart(ctx, {
     type: "line",
     data: {
-      labels: xdata, //time
+      labels: xdata, // time
       datasets: [
         {
           label: "WPM",
-          data: wpm, //data
+          data: wpm, // data
           borderColor: "#fd4",
-          borderWidth: 2,
+          tension: 0.4,
+          fill: true,
         },
       ],
     },
@@ -300,10 +317,24 @@ function chartWPM() {
         intersect: false,
       },
       plugins: {
+        legend: {
+          labels: {
+            boxWidth: 20,
+            padding: 20,
+          },
+        },
         title: {
           display: true,
           text: "TEST SUMMARY",
+          padding: {
+            top: 20,
+            bottom: 30,
+          },
+          font: {
+            size: 20,
+          },
         },
+        increaseLegendMargin: plugin,
       },
       scales: {
         x: {
