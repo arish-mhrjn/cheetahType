@@ -46,6 +46,7 @@ function newGame() {
   addClass(document.querySelector(".letter"), "current");
   window.timer = null;
   document.getElementById("info").display = "block";
+  gameOver();
 }
 
 function CalculateWpm(timePassed) {
@@ -95,7 +96,7 @@ function gameOver() {
   document.getElementById("typingPage").style.display = "none";
   document.getElementById("canvasPage").style.display = "flex";
   document.getElementById("info").style.display = "none";
-  document.getElementById("header").style.justifyContent = "flex-end";
+  document.getElementById("header").style.justifyContent = "center";
   document.querySelector(".wpm").textContent = getWpm();
   document.querySelector(".time").innerHTML = `${gameTime / 1000} sec`;
   chartWPM();
