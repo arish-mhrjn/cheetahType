@@ -98,6 +98,7 @@ function gameOver() {
   document.getElementById("header").style.justifyContent = "flex-end";
   document.querySelector(".wpm").textContent = getWpm();
   document.querySelector(".time").innerHTML = `${gameTime / 1000} sec`;
+  chartWPM();
 }
 
 game.addEventListener("keyup", (ev) => {
@@ -276,11 +277,9 @@ function chartWPM() {
   const plugin = {
     id: "increaseLegendMargin",
     beforeInit(chart) {
-      // Get a reference to the original fit function
       const origFit = chart.legend.fit;
       chart.legend.fit = function fit() {
         origFit.bind(chart.legend)();
-        // Change the height to any desired value
         this.height += 50;
       };
     },
@@ -307,7 +306,12 @@ function chartWPM() {
     },
     options: {
       responsive: true,
-      elements: { line: { tension: 0.4 } },
+      maintainAspectRatio: false,
+      elements: {
+        line: {
+          tension: 0.4,
+        },
+      },
       hover: {
         mode: "index",
         intersect: false,
@@ -338,13 +342,20 @@ function chartWPM() {
       },
       scales: {
         x: {
+          title: {
+            display: true,
+            text: "Time (s)",
+          },
           grid: {
             drawOnChartArea: false,
           },
         },
         y: {
-          display: true,
-          beginAtZero: false,
+          title: {
+            display: true,
+            text: "Words Per Minute (WPM)",
+          },
+          beginAtZero: true,
           grid: {
             drawOnChartArea: false,
           },
@@ -386,7 +397,6 @@ function updateScroll() {
 }
 
 newGame();
-chartWPM();
 requiredLength = word.offsetTop + 70;
 
 updateCursorPositioning();

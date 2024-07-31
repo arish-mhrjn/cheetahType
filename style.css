@@ -37,7 +37,7 @@ body {
 }
 
 main {
-  width: 1000px;
+  width: 1200px;
   margin: 50px auto;
 }
 
@@ -46,6 +46,7 @@ main {
   margin: 70px 6px 180px;
   position: relative;
   top: -10px;
+
   align-items: center;
   justify-content: space-between;
 }
@@ -121,7 +122,7 @@ div.word.hidden {
 
 @media (max-width: 1200px) {
   main {
-    width: 90%;
+    width: 80%;
   }
 
   .logo {
