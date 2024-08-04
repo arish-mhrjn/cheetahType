@@ -119,9 +119,10 @@ div.word.hidden {
   margin-left: 0;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1300px) {
   main {
-    width: 90%;
+    width: 80%;
+    margin: 20px auto;
   }
 
   .logo {

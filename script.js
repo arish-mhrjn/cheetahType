@@ -46,7 +46,6 @@ function newGame() {
   addClass(document.querySelector(".letter"), "current");
   window.timer = null;
   document.getElementById("info").display = "block";
-  gameOver();
 }
 
 function CalculateWpm(timePassed) {
@@ -406,3 +405,4 @@ window.addEventListener("resize", () => {
   updateCursorPositioning();
 });
 window.addEventListener("resize", updateScroll);
+s;
