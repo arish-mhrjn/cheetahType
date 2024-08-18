@@ -273,6 +273,22 @@ function updateCursorPositioning() {
   const cursorTop = cursor.offsetTop;
 }
 
+function resizeChart() {
+  if (myChart) {
+    myChart.destroy();
+
+    // Update canvas dimensions
+    const canvasContainer = document.getElementById("graph");
+    const ctx = document.getElementById("chart").getContext("2d");
+    ctx.canvas.width = canvasContainer.clientWidth;
+    ctx.canvas.height = canvasContainer.clientHeight;
+
+    // Destroy and recreate the chart
+    chartWPM();
+  }
+}
+
+let myChart;
 function chartWPM() {
   const plugin = {
     id: "increaseLegendMargin",
@@ -290,7 +306,11 @@ function chartWPM() {
   ctx.canvas.width = canvasContainer.clientWidth;
   ctx.canvas.height = canvasContainer.clientHeight;
 
-  new Chart(ctx, {
+  if (myChart) {
+    myChart.destroy(); // Destroy existing chart if it exists
+  }
+
+  myChart = new Chart(ctx, {
     type: "line",
     data: {
       labels: xdata, // time
@@ -397,12 +417,13 @@ function updateScroll() {
 }
 
 newGame();
+
 requiredLength = word.offsetTop + 70;
 
 updateCursorPositioning();
 window.addEventListener("resize", () => {
   requiredLength = word.offsetTop + 70;
   updateCursorPositioning();
+  resizeChart();
 });
 window.addEventListener("resize", updateScroll);
-s;

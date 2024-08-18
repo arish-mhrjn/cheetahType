@@ -28,7 +28,7 @@ body {
   color: var(--primaryColor);
   position: relative;
   top: -30px;
-  left: -220px;
+  left: 40px;
 }
 
 .cheetah {
@@ -37,7 +37,11 @@ body {
 }
 
 main {
-  width: 1000px;
+  width: 90%;
+  margin: 50px auto;
+}
+#main2 {
+  width: 70%;
   margin: 50px auto;
 }
 
@@ -119,14 +123,36 @@ div.word.hidden {
   margin-left: 0;
 }
 
-@media (max-width: 1300px) {
+@media (max-width: 1850px) {
   main {
-    width: 80%;
-    margin: 20px auto;
+    width: 90%;
+    margin: 50px auto;
   }
 
   .logo {
     left: 0;
+  }
+
+  #canvasPage {
+    width: 100% !important; /* Full width on smaller screens */
+    height: 250px !important; /* Adjust height as needed */
+  }
+
+  #wpmData {
+    width: 100% !important; /* Adjust width to fit the container */
+    height: auto !important; /* Adjust height as needed */
+  }
+
+  #wpmData #container {
+    height: 100% !important; /* Adjust height to fit content */
+  }
+
+  #wpmData #title {
+    font-size: 2rem !important; /* Adjust font size */
+  }
+
+  #wpmData .data {
+    font-size: 2rem !important; /* Adjust font size */
   }
 }
 
@@ -171,51 +197,48 @@ div.word.hidden {
 }
 
 #canvasPage {
-  display: none;
-  width: 1700px;
-  height: 350px;
-  position: absolute;
-  top: 55%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  gap: 1rem;
+  display: flex; /* Use flexbox to center contents */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  max-width: 100%; /* Prevent the canvas page from becoming too wide */
+  width: 150%; /* Responsive width */
+  height: 30vh; /* Responsive height based on viewport height */
+  position: relative; /* Use relative positioning */
+  margin: auto; /* Center horizontally */
 }
 
-/* #chart {
-  width: 1800px;
-  height: 350px;
-} */
-
 #graph {
-  width: 1500px;
-  height: 350px;
+  width: 100%; /* Full width of the container */
+  height: 100%; /* Full height of the container */
 }
 
 #wpmData {
-  width: 200px;
-  height: 350px;
+  width: 90%; /* Responsive width */
+  max-width: 200px; /* Maximum width */
+  height: 100%; /* Adjust height based on content */
   font-family: "vazirmatn";
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 10px;
+  box-sizing: border-box; /* Ensure padding is included in width */
 }
 
 #wpmData #container {
-  width: 180px;
-  height: 165px;
+  width: 100%; /* Adjust width to fit the container */
+  height: 165px; /* Set a fixed height */
   display: block;
   text-align: center;
+  position: relative;
 }
 
 #wpmData #title {
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   color: var(--textSecondary);
   line-height: 3.5rem;
-  /* font-family: ; */
 }
 
 #wpmData .data {
-  font-size: 3.5rem;
+  font-size: 3.2rem;
   color: var(--primaryColor);
 }
