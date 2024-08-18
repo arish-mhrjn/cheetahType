@@ -13,7 +13,7 @@ const words =
   );
 const wordsCount = words.length;
 const gameTime = 30 * 1000;
-
+const button = document.getElementById("buttons");
 function formatWord(word) {
   return `<div class="word">
   <span class="letter">${word
@@ -21,7 +21,26 @@ function formatWord(word) {
     .join('</span><span class="letter">')}</span>
   </div>`;
 }
+button.addEventListener("click", function () {
+  newGame();
+  clearInterval(intervalId);
+  intervalId = setInterval(window.timer, 1000);
+  removeClass(document.getElementById("game"), "over");
+  updateCursorPositioning(); //cursor updatad
+  window.gameStart = false;
+  document.getElementById("info").style.opacity = "0";
+  document.addEventListener("keyup", function (ev) {
+    const key = ev.key;
+    const isLetter = key.length === 1 && key !== " ";
+    const isSpace = key === " ";
 
+    if (!window.timer && (isLetter || isSpace)) {
+      document.getElementById("info").style.opacity = "1";
+
+      startTimer();
+    }
+  });
+});
 function addClass(el, name) {
   el.classList.add(name);
 }

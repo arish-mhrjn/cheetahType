@@ -167,6 +167,7 @@ div.word.hidden {
     opacity: 1;
   }
 }
+
 #cursor {
   display: none;
   width: 2px;
