@@ -58,7 +58,7 @@ main {
   text-align: right;
 }
 #info {
-  display: hidden;
+  opacity: 0;
   color: var(--primaryColor);
 }
 button {
@@ -182,8 +182,8 @@ div.word.hidden {
   display: block;
 }
 
-#game.over #words {
-  opacity: 0.5;
+#game.over #info {
+  opacity: 0;
 }
 
 #game.over:focus #cursor {
